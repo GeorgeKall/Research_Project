@@ -1177,19 +1177,25 @@ version = "0.11.3"
 
 [[deps.TulipaClustering]]
 deps = ["CSV", "Clustering", "DataFrames", "Distances", "DuckDB", "DuckDB_jll", "LinearAlgebra", "ProgressBars", "SparseArrays", "Statistics", "TOML", "TulipaIO"]
-path = "../TulipaClustering.jl"
+git-tree-sha1 = "6861349f3c6ab7be2cec396501c6ac337a657ba8"
+repo-rev = "e65efadec8368f36033ebb85f0390633739d1d2f"
+repo-url = "https://github.com/GeorgeKall/TulipaClustering.jl"
 uuid = "314fac8b-c762-4aa3-9d12-851379729163"
 version = "0.5.2"
 
 [[deps.TulipaEnergyModel]]
 deps = ["CSV", "DuckDB", "HiGHS", "JSON", "JuMP", "MathOptInterface", "OrderedCollections", "ParametricOptInterface", "Statistics", "TOML", "TimerOutputs", "TulipaIO"]
-path = "../TulipaEnergyModel.jl"
+git-tree-sha1 = "59d08d921d8484bd4790704c518a874006e04b07"
+repo-rev = "v0.21.0"
+repo-url = "https://github.com/TulipaEnergy/TulipaEnergyModel.jl"
 uuid = "5d7bd171-d18e-45a5-9111-f1f11ac5d04d"
 version = "0.21.0"
 
 [[deps.TulipaIO]]
 deps = ["CSV", "DataFrames", "Dates", "DuckDB", "DuckDB_jll", "Glob", "HTTP", "JSON3", "PrettyTables", "Printf"]
 git-tree-sha1 = "ea9e654865ef01ce92913209cb03c50ac41bde75"
+repo-rev = "v0.5.0"
+repo-url = "https://github.com/TulipaEnergy/TulipaIO.jl"
 uuid = "7b3808b7-0819-42d4-885c-978ba173db11"
 version = "0.5.0"
 
