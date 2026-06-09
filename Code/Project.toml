@@ -14,6 +14,6 @@ TulipaEnergyModel = "5d7bd171-d18e-45a5-9111-f1f11ac5d04d"
 TulipaIO = "7b3808b7-0819-42d4-885c-978ba173db11"
 
 [sources]
-TulipaClustering = {url = "https://github.com/GeorgeKall/TulipaClustering.jl", rev = "e65efadec8368f36033ebb85f0390633739d1d2f"}
+TulipaClustering = {url = "https://github.com/GeorgeKall/TulipaClustering.jl", rev = "855b3ee22160a557025d24b38cd0ed67bf6793b3"}
 TulipaEnergyModel = {url = "https://github.com/TulipaEnergy/TulipaEnergyModel.jl", rev = "v0.21.0"}
 TulipaIO = {url = "https://github.com/TulipaEnergy/TulipaIO.jl", rev = "v0.5.0"}

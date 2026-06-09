@@ -9,27 +9,27 @@ Energy System Optimization, George Kalliakmanis Danassis, TU Delft, 2026.
 
 
 ## Repository Structure
-Code/                            Julia scripts and environment
-exp1.jl                        Main experiment script
-utils.jl                       Helper functions
-plotting.jl                    Plotting functions
-Project.toml                   Julia environment specification
-Manifest.toml                  Exact dependency versions (pinned)
-Input_Data_and_Results/
-tutorial-9/                    Input CSV files for the energy system
-results/                     Output CSVs and graphs produced by the experiments
-results_1.8/                      Output CSVs and graphs produced by the experiments with ENS=1.8
-results_0.18/                     Output CSVs and graphs produced by the experiments with ENS=0.18
-results_cross-scenario/                     Output CSVs and graphs produced by the experiments with cross-scenario clustering
+- Code/                            Julia scripts and environment
+    - exp1.jl                        Main experiment script
+    - utils.jl                       Helper functions
+    - plotting.jl                    Plotting functions
+    - Project.toml                   Julia environment specification
+    - Manifest.toml                  Exact dependency versions
+- Input_Data_and_Results/
+    - tutorial-9/                    Input CSV files for the energy system
+    - results/                     Output CSVs and graphs produced by the experiments
+    - results_0.18/                     Output CSVs and graphs produced by the experiments with ENS=0.18
+    - results_1.8/                      Output CSVs and graphs produced by the experiments with ENS=1.8
+    - results_cross-scenario/                     Output CSVs and graphs produced by the experiments with cross-scenario clustering
 ## Requirements
 
 - Julia 1.12.6
-- A valid **Gurobi license** 
+- A **Gurobi license** 
 
 ## How to Reproduce
 
-1. Clone this repository.
-2. Install Julia 1.12.6
+1. Clone this repository
+2. Install Julia
 3. Open a terminal in the `Code/` directory and start Julia:
 
 ```bash
