@@ -6,8 +6,6 @@ import TulipaIO as TIO
 import TulipaEnergyModel as TEM
 import TulipaClustering as TC
 import Gurobi
-
-
 using DuckDB
 using DataFrames
 using Plots
@@ -18,22 +16,20 @@ using Plots.PlotMeasures
 using Colors
 
 using JuMP
-#plotly()
 
 #Random seeds 
-n_seeds = 3;
+n_seeds = 5;
 seeds = collect(1:n_seeds);
 
-#input_dir = "my-awesome-energy-system/Data";
-# output_dir = "my-awesome-energy-system/Data/results";
-input_dir = "my-awesome-energy-system/tutorial-9";
-output_dir = "my-awesome-energy-system/tutorial-9/results";
+
+input_dir = "../Input_Data_and_Results/tutorial-9";
+output_dir = "../Input_Data_and_Results/tutorial-9/results";
 
 #Include the utils file
 include("utils.jl");
 include("plotting.jl");
 env = Gurobi.Env();
-#println(env)
+
 # ── Reference run (all periods, no clustering) ─────────────────────────────
 ref = run_full(input_dir)
 
@@ -71,7 +67,7 @@ clustering_methods = [
 
 worst_case_options = [
     # (worst_case,  label)
-    (:none,         "no_wc"),
+    #(:none,         "no_wc"),
     (:global,     "global_wc"), 
     (:local,      "local_wc"), #cluster first then for each cluster find the worst case constructed from the cluster periods. Use the centroids and the worst-cases
     (:global_fixed, "global_fixed_wc"), # This clusters with k-1 clusters and adds the global worst case after weight fitting and assigns to it 10% of the total weight to it
@@ -100,7 +96,7 @@ results = DataFrame(
     regret            = Float64[],  # % cost increase when fixing reduced-model investments and re-solving on full data
     lol_reduced       = Int[],      # loss of load (ENS timesteps) when re-solving full model with fixed investments
     lol_full          = Int[],      # loss of load on the full reference model (should equal lol_ref, kept for sanity)
-    relative_wc_weight = Float64[], # weight of WC RP(s) divided by the fair-share weight (total/k); >1 means over-weighted
+    relative_wc_weight = Float64[], # weight of WC RP(s) divided by the fair-share weight (total/k); >1 means over-weighted NOT USED
     percentage        = Float64[],  # fraction of total weight hard-assigned to WC for global_fixed (e.g. 0.10); 0.10 for others
     avg_weight_normal = Float64[],  # average weight (days represented) across the regular (non-WC) RPs
     avg_weight_wc     = Float64[],  # average weight (days represented) across the WC RPs; 0.0 if wc == :none
@@ -126,17 +122,7 @@ results = DataFrame(
 for (wc, wc_label) in worst_case_options
     for (method, dist, wtype, method_label) in clustering_methods
         for k in k_values    
-            #Hull methods are deterministic: only run once
-            # is_deterministic = method in [:convex_hull, :conical_hull, :convex_hull_with_null] && wc != :local_before
-            # seed_list = is_deterministic ? [1] : seeds
-            # if !(method in [:convex_hull, :conical_hull, :convex_hull_with_null]) && (wc == :local_before || wc == :global_before)
-            #     continue # Skip if local before or global before and clustering method is not hull clustering 
-            # end    
             seed_list = seeds
-            # if( wc == :global_fixed && (method == :kmeans || method == :kmedoids ) && wtype == :dirac)
-            #     println("skipped")
-            #     continue
-            # end    
             percentage_list = wc == :global_fixed ? global_fixed_percentages : [0.0] # not applicable for methods other than global_fixed
             for percentage in percentage_list
                 for seed in seed_list
@@ -201,13 +187,11 @@ for (wc, wc_label) in worst_case_options
         end
     end
 end
-#Read results from csv if needed 
-#results = CSV.read(joinpath(output_dir, "results_checkpoint.csv"), DataFrame)
-#This is to read the strings correctly! otherwise it efficiently tries to store by the currently longest string
+
 results = CSV.read(joinpath(output_dir, "results_checkpoint.csv"), DataFrame, stringtype=String)
 
 println(results)
-#println(results_agg)
+
 # Aggregate raw results into mean and std across seeds
 
 results_agg = combine(
@@ -268,6 +252,7 @@ println(results_agg)
 include("plotting.jl");
 
 
+
 #BY WEIGHT TYPE
 plot_gallery_regret_byWeightType_Split(results_agg, "kmedoids", output_dir; cross_scenario=false)
 plot_gallery_regret_byWeightType_Split(results_agg, "kmeans", output_dir; cross_scenario=false)
@@ -278,11 +263,11 @@ plot_gallery_LOL_byWeightType_Split(results_agg, "kmeans", output_dir, lol_ref; 
 
 
 #BY WORST CASE
-plot_gallery_regret_byWorstCase(results_agg, "kmedoids", output_dir)
-plot_gallery_regret_byWorstCase(results_agg, "kmeans", output_dir)
+plot_gallery_regret_byWorstCase(results_agg, "kmedoids", output_dir, cross_scenario= false)
+plot_gallery_regret_byWorstCase(results_agg, "kmeans", output_dir, cross_scenario= false)
 
-plot_gallery_LOL_byWorstCase(results_agg, "kmedoids", output_dir, lol_ref)
-plot_gallery_LOL_byWorstCase(results_agg, "kmeans", output_dir, lol_ref)
+plot_gallery_LOL_byWorstCase(results_agg, "kmedoids", output_dir, lol_ref, cross_scenario= false)
+plot_gallery_LOL_byWorstCase(results_agg, "kmeans", output_dir, lol_ref, cross_scenario= false)
 
 
 
@@ -314,17 +299,8 @@ plot_avg_local_wc_distance_vs_k(results_agg, output_dir)
 
 
 
-
-
-plot_results(results_agg, clustering_methods, output_dir)
-
-plot_investment_decisions(results_agg, investment_decisions, inv_cost_ref, output_dir;
-                          k_select=8, clustering_method="kmeans", weight_type="dirac")
-
-
-
 #Plots for 0.18
-include("plotting.jl");
+
 plot_gallery_regret_byWeightType(results_agg, "kmedoids", output_dir)
 plot_gallery_regret_byWeightType(results_agg, "kmeans", output_dir)
 plot_gallery_LOL_byWeightType(results_agg, "kmedoids", output_dir, lol_ref)
@@ -332,4 +308,21 @@ plot_gallery_LOL_byWeightType(results_agg, "kmeans", output_dir, lol_ref)
 
 
 
-#plots for cross scenario
+
+plot_totalWeight_globalFixed(results_agg, "kmedoids", output_dir)
+plot_totalWeight_globalFixed(results_agg, "kmeans", output_dir)
+plot_totalWeight_global(results_agg, "kmedoids", output_dir)
+plot_totalWeight_global(results_agg, "kmeans", output_dir)
+
+plot_totalWeight_local(results_agg, "kmedoids", output_dir)
+plot_totalWeight_local(results_agg, "kmeans", output_dir)
+
+
+
+
+
+include("plotting.jl");
+# #for poster
+plot_gallery_regret_globalLocal_byClusteringMethod(results_agg, output_dir)
+plot_gallery_LOL_globalLocal_byClusteringMethod(results_agg, output_dir, lol_ref)
+

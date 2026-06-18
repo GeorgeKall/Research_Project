@@ -1,18 +1,13 @@
 # utils.jl
 using Random
 
-# layout tells TC which column is year and how to group (by milestone_year and scenario for tutorial-9)THE ONE USED BEFORE
+# Use this layout for running the experiments with per-scenario clustering
 const LAYOUT = TC.ProfilesTableLayout(;
     year = :milestone_year,
     cols_to_groupby = [:milestone_year, :scenario]
 )
 
-# const LAYOUT = TC.ProfilesTableLayout(;
-#     year = :milestone_year,
-#     cols_to_groupby = [:milestone_year]
-# )
-
-# #For cross scenario
+#Use this layout for running the experiments with cross-scenario clustering
 # const LAYOUT = TC.ProfilesTableLayout(;
 #     year = :milestone_year,
 #     cols_to_groupby = [:milestone_year],
@@ -26,10 +21,6 @@ const LAYOUT = TC.ProfilesTableLayout(;
 function fresh_connection(input_dir)
     connection = DBInterface.connect(DuckDB.DB);
     TIO.read_csv_folder(connection, input_dir);
-
-    #uncomment this for tutorial-9 
-    #DBInterface.execute(connection, "DELETE FROM profiles_wide WHERE scenario != '2008'")
-    #DBInterface.execute(connection, "ALTER TABLE profiles_wide RENAME COLUMN milestone_year TO year;");
     return connection;
 end
 
@@ -51,10 +42,9 @@ end
 
 
 # Full regret pipeline for a given clustering configuration:
-# 1. Cluster the time series into k representative periods
-# 2. Solve the reduced model to get investment decisions
-# 3. Fix those investments and re-solve on the full data
-# Returns both the reduced EP and the regret 
+# - Cluster the time series into k representative periods
+# - Solve the reduced model to get investment decisions
+# - Fix those investments and re-solve on the full data
 function run_clustered(ref, ref_cost,  input_dir, period_duration, k, method, distance, weight_type;
                        worst_case=:none,
                        seed,

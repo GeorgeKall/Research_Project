@@ -1,6 +1,5 @@
 #test.jl
-
-# Guarantee to run in the current directory
+#FOR PLOTTING THE PROFILES AND REPRESENTATIVE PERIODS 
 using Pkg: Pkg
 
 Pkg.activate(@__DIR__)
@@ -20,14 +19,9 @@ using Statistics
 using Plots.PlotMeasures
 
 using JuMP
-# pwd() to check where the fuck you are 
-# Define the directories - notice we now select tutorial 2 for both the input and output directory
-# input_dir = "my-awesome-energy-system/Data";
-# output_dir = "my-awesome-energy-system/Data/results";
-
 
 input_dir = "my-awesome-energy-system/tutorial-9";
-#output_dir = "my-awesome-energy-system/tutorial-9/result";
+
 #Include the utils file
 include("utils.jl");
 include("plotting.jl")
@@ -38,7 +32,7 @@ ref = run_full(input_dir)
 println(ref)
 ref_cost = ref.objective_value
 lol_ref = compute_loss_of_load(ref)
-#println(DBInterface.execute(ref.db_connection, "SHOW TABLES"))
+
 original_profiles = (DBInterface.execute(ref.db_connection, "SELECT * FROM profiles") |> DataFrame)
 
 
@@ -94,11 +88,7 @@ for k in k_values
                     cost_diff    = reduced_cost - ref_cost;
                     relative_wc_weight = get_relative_wc_weight(clusters, wc)
 
-                    #push!(results, (k, seed, construction, label, wc_label,
-                                    #reduced_cost, cost_ratio, cost_diff, regret,
-                                   # lol_red, lol_full, relative_wc_weight));
-                    #Save results so if it crashes we are safe
-                    #CSV.write(joinpath(output_dir, "results_checkpoint.csv"), results)
+                    
                     
                     #PLOT THE REPRESENTATIVE DAYS
                     plot_representative_periods(clusters, label, wc, output_dir)

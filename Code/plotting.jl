@@ -1,192 +1,6 @@
 #plotting.jl
 
 
-
-# ── Plots ───────────────────────────────────────────────────────────────────
-
-#This plot has all combinations and uses relative regret as the metric with no worst case
-plot_ALL_Regret_nowc = plot(title="Regret vs Number of RPs with no worst case", xlabel="Number of RPs (k)", ylabel="Regret (%)");
-#This plot has all combinations and uses ratio difference as the metric with no worst case
-plot_ALL_Ratio_nowc = plot(title="Cost Ratio vs Number of RPs with no worst case", xlabel="Number of RPs (k)", ylabel="Cost ratio");
-#This plot has all combinations and uses cost difference as the metric with no worst case 
-plot_ALL_Difference_nowc = plot(title="Cost Difference vs Number of RPs with no worst case", xlabel="Number of RPs (k)", ylabel="Cost difference");
-#This plot has all combinations and uses loss of load as the metric with no worst case 
-plot_ALL_LOL_nowc = plot(title="Loss of load vs Number of RPs with no worst case", xlabel="Number of RPs (k)", ylabel="Loss of Load");
-#This plot has all combinations and uses relative regret as the metric with global worst case
-plot_ALL_Regret_globalwc = plot(title="Regret vs Number of RPs with global worst case", xlabel="Number of RPs (k)", ylabel="Regret (%)");
-#This plot has all combinations and uses ratio difference as the metric with gloabl worst case
-plot_ALL_Ratio_globalwc = plot(title="Cost Ratio vs Number of RPs with global worst case", xlabel="Number of RPs (k)", ylabel="Cost ratio");
-#This plot has all combinations and uses cost difference as the metric with global worst case 
-plot_ALL_Difference_globalwc = plot(title="Cost Difference vs Number of RPs with global worst case", xlabel="Number of RPs (k)", ylabel="Cost difference");
-#This plot has all combinations and uses loss of load as the metric with global worst case 
-plot_ALL_LOL_globalwc = plot(title="Loss of load vs Number of RPs with global worst case", xlabel="Number of RPs (k)", ylabel="Loss of Load");
-#This plot has all combinations and uses relative regret as the metric with global worst case before clustering
-plot_ALL_Regret_globalwc_before = plot(title="Regret vs Number of RPs with global worst case", xlabel="Number of RPs (k)", ylabel="Regret (%)");
-#This plot has all combinations and uses ratio difference as the metric with gloabl worst case before clustering
-plot_ALL_Ratio_globalwc_before = plot(title="Cost Ratio vs Number of RPs with global worst case", xlabel="Number of RPs (k)", ylabel="Cost ratio");
-#This plot has all combinations and uses cost difference as the metric with global worst case before clustering
-plot_ALL_Difference_globalwc_before = plot(title="Cost Difference vs Number of RPs with global worst case", xlabel="Number of RPs (k)", ylabel="Cost difference");
-#This plot has all combinations and uses loss of load as the metric with global worst case before clustering 
-plot_ALL_LOL_globalwc_before = plot(title="Loss of load vs Number of RPs with global worst case", xlabel="Number of RPs (k)", ylabel="Loss of Load");
-#This plot has all combinations and uses relative regret as the metric with local worst case
-plot_ALL_Regret_localwc = plot(title="Regret vs Number of RPs with local worst case", xlabel="Number of RPs (k)", ylabel="Regret (%)");
-#This plot has all combinations and uses ratio difference as the metric with local worst case
-plot_ALL_Ratio_localwc = plot(title="Cost Ratio vs Number of RPs with local worst case", xlabel="Number of RPs (k)", ylabel="Cost ratio");
-#This plot has all combinations and uses cost difference as the metric with local worst case 
-plot_ALL_Difference_localwc = plot(title="Cost Difference vs Number of RPs with local worst case", xlabel="Number of RPs (k)", ylabel="Cost difference");
-#This plot has all combinations and uses loss of load as the metric with local worst case 
-plot_ALL_LOL_localwc = plot(title="Loss of load vs Number of RPs with local worst case", xlabel="Number of RPs (k)", ylabel="Loss of Load");
-
-#Kmeans
-#This plot has all combinations using k-means clustering and uses relative regret as the metric
-plot_kmeans_Regret = plot(title="Regret vs Number of RPs for k-means", xlabel="Number of RPs (k)", ylabel="Regret (%)");
-#This plot has all combinations using k-means and uses ratio difference as the metric 
-plot_kmeans_Ratio = plot(title="Cost Ratio vs Number of RPs for k-means", xlabel="Number of RPs (k)", ylabel="Cost ratio");
-#This plot has all combinations using k-means and uses cost difference as the metric 
-plot_kmeans_Difference = plot(title="Cost Difference vs Number of RPs for k-means", xlabel="Number of RPs (k)", ylabel="Cost difference");
-#This plot has all combinations using k-means and uses loss of load as the metric
-plot_kmeans_LOL = plot(title="Loss of load vs Number of RPs for k-means", xlabel="Number of RPs (k)", ylabel="Loss of Load");
-
-#Kmedoids
-#This plot has all combinations using k-medoids clustering and uses relative regret as the metric 
-plot_kmedoids_Regret = plot(title="Regret vs Number of RPs for k-medoids", xlabel="Number of RPs (k)", ylabel="Regret (%)");
-#This plot has all combinations using k-medoids clustering and uses ratio difference as the metric 
-plot_kmedoids_Ratio = plot(title="Cost Ratio vs Number of RPs for k-medoids", xlabel="Number of RPs (k)", ylabel="Cost ratio");
-#This plot has all combinations using k-medoids clustering and uses cost difference as the metric  
-plot_kmedoids_Difference = plot(title="Cost Difference vs Number of RPs  for k-medoids", xlabel="Number of RPs (k)", ylabel="Cost difference");
-#This plot has all combinations using k-medoids clustering and uses loss of load as the metric
-plot_kmedoids_LOL = plot(title="Loss of load vs Number of RPs for k-medoids", xlabel="Number of RPs (k)", ylabel="Loss of Load");
-
-#Hull clustering
-#This plot has all combinations using hull clustering and uses relative regret as the metric 
-plot_hull_Regret = plot(title="Regret vs Number of RPs for hull clustering", xlabel="Number of RPs (k)", ylabel="Regret (%)");
-#This plot has all combinations using hull clustering and uses ratio difference as the metric 
-plot_hull_Ratio = plot(title="Cost Ratio vs Number of RPs for hull clustering", xlabel="Number of RPs (k)", ylabel="Cost ratio");
-#This plot has all combinations using hull clustering and uses cost difference as the metric 
-plot_hull_Difference = plot(title="Cost Difference vs Number of RPs for hull clustering", xlabel="Number of RPs (k)", ylabel="Cost difference");
-#This plot has all combinations using hull clustering and uses loss of load as the metric 
-plot_hull_LOL = plot(title="Loss of load vs Number of RPs for hull clustering", xlabel="Number of RPs (k)", ylabel="Loss of Load");
-
-
-function plot_results(results, clustering_methods, output_dir)
-    
-    for ((_, _, _, method_label), color) in zip(clustering_methods, palette(:seaborn_bright))
-        #NO WORST CASE
-        label = "$(method_label)_no_wc";
-        df = filter(r -> r.method == label, results);
-        if (!isempty(df)) 
-            #Fill in the plots
-            plot!(plot_ALL_Regret_nowc, df.k, df.regret, label=label, marker=:circle, color=color);
-            plot!(plot_ALL_Ratio_nowc, df.k, df.cost_ratio, label=label, marker=:circle, color=color);
-            plot!(plot_ALL_Difference_nowc, df.k, df.cost_diff, label=label, marker=:circle, color=color);
-            plot!(plot_ALL_LOL_nowc, df.k, df.lol_reduced, label=label, marker=:circle, color=color);
-        end
-        
-
-        #GLOBAL
-        label = "$(method_label)_global_wc"
-        df = filter(r -> r.method == label, results);
-        if (!isempty(df)) 
-            #Fill in the plots
-            plot!(plot_ALL_Regret_globalwc, df.k, df.regret, label=label, marker=:circle, color=color);
-            plot!(plot_ALL_Ratio_globalwc, df.k, df.cost_ratio, label=label, marker=:circle, color=color);
-            plot!(plot_ALL_Difference_globalwc, df.k, df.cost_diff, label=label, marker=:circle, color=color);
-            plot!(plot_ALL_LOL_globalwc, df.k, df.lol_reduced, label=label, marker=:circle, color=color);
-        end
-
-        #GLOBAL Before clustering
-        label = "$(method_label)_global_wc_before"
-        df = filter(r -> r.method == label, results);
-        if (!isempty(df)) 
-            #Fill in the plots
-            plot!(plot_ALL_Regret_globalwc_before, df.k, df.regret, label=label, marker=:circle, color=color);
-            plot!(plot_ALL_Ratio_globalwc_before, df.k, df.cost_ratio, label=label, marker=:circle, color=color);
-            plot!(plot_ALL_Difference_globalwc_before, df.k, df.cost_diff, label=label, marker=:circle, color=color);
-            plot!(plot_ALL_LOL_globalwc_before, df.k, df.lol_reduced, label=label, marker=:circle, color=color);
-        end
-    
-
-        #LOCAL
-        label = "$(method_label)_local_wc"
-        df = filter(r -> r.method == label, results);
-        if (!isempty(df)) 
-            #Fill in the plots
-            plot!(plot_ALL_Regret_localwc, df.k, df.regret, label=label, marker=:circle, color=color);
-            plot!(plot_ALL_Ratio_localwc, df.k, df.cost_ratio, label=label, marker=:circle, color=color);
-            plot!(plot_ALL_Difference_localwc, df.k, df.cost_diff, label=label, marker=:circle, color=color);
-            plot!(plot_ALL_LOL_localwc, df.k, df.lol_reduced, label=label, marker=:circle, color=color);
-        end
-        
-    end
-
-
-
-    wc_styles = [
-        ("no_wc",     :solid, :circle),
-        ("global_wc", :dash,  :diamond),
-        ("global_wc_before", :dashdot, :utriangle), 
-        ("local_wc",  :dot,   :square),
-        ("local_before_wc",  :dashdotdot, :pentagon),
-    ]
-
-    for ((_, _, _, method_label), color) in zip(clustering_methods, palette(:seaborn_bright))
-        for (wc_label, lstyle, lmarker) in wc_styles
-            label = "$(method_label)_$(wc_label)"
-            df = filter(r -> r.method == label, results)
-            isempty(df) && continue
-
-            short_label = "$(method_label)_$(wc_label)"
-            if startswith(method_label, "kmeans")
-                plot!(plot_kmeans_Regret,    df.k, df.regret,    label=short_label, marker=lmarker, color=color, linestyle=lstyle);
-                plot!(plot_kmeans_Ratio,     df.k, df.cost_ratio, label=short_label, marker=lmarker, color=color, linestyle=lstyle);
-                plot!(plot_kmeans_Difference, df.k, df.cost_diff, label=short_label, marker=lmarker, color=color, linestyle=lstyle);
-                plot!(plot_kmeans_LOL, df.k, df.lol_reduced, label=short_label, marker=lmarker, color=color, linestyle=lstyle);
-            elseif startswith(method_label, "kmedoids")
-                plot!(plot_kmedoids_Regret,    df.k, df.regret,    label=short_label, marker=lmarker, color=color, linestyle=lstyle);
-                plot!(plot_kmedoids_Ratio,     df.k, df.cost_ratio, label=short_label, marker=lmarker, color=color, linestyle=lstyle);
-                plot!(plot_kmedoids_Difference, df.k, df.cost_diff, label=short_label, marker=lmarker, color=color, linestyle=lstyle);
-                plot!(plot_kmedoids_LOL, df.k, df.lol_reduced, label=short_label, marker=lmarker, color=color, linestyle=lstyle);
-            elseif startswith(method_label, "hull")
-                plot!(plot_hull_Regret,    df.k, df.regret,    label=short_label, marker=lmarker, color=color, linestyle=lstyle);
-                plot!(plot_hull_Ratio,     df.k, df.cost_ratio, label=short_label, marker=lmarker, color=color, linestyle=lstyle);
-                plot!(plot_hull_Difference, df.k, df.cost_diff, label=short_label, marker=lmarker, color=color, linestyle=lstyle);
-                plot!(plot_hull_LOL, df.k, df.lol_reduced, label=short_label, marker=lmarker, color=color, linestyle=lstyle);
-            end
-        end
-    end
-
-
-
-
-    #Add the baseline reference cost obtained by solving the model with the full data
-    for p in [plot_ALL_Regret_nowc, plot_ALL_Regret_globalwc, plot_ALL_Regret_localwc,
-            plot_kmeans_Regret, plot_kmedoids_Regret, plot_hull_Regret]
-        hline!(p, [0.0], linestyle=:dash, color=:black, label="reference");
-    end
-    for p in [plot_ALL_Ratio_nowc, plot_ALL_Ratio_globalwc, plot_ALL_Ratio_localwc,
-            plot_kmeans_Ratio, plot_kmedoids_Ratio, plot_hull_Ratio]
-        hline!(p, [1.0], linestyle=:dash, color=:black, label="reference");
-    end
-    for p in [plot_ALL_Difference_nowc, plot_ALL_Difference_globalwc, plot_ALL_Difference_localwc,
-            plot_kmeans_Difference, plot_kmedoids_Difference, plot_hull_Difference]
-        hline!(p, [0.0], linestyle=:dash, color=:black, label="reference");
-    end
-
-
-    display(plot_ALL_Regret_nowc);    display(plot_ALL_Ratio_nowc);    display(plot_ALL_Difference_nowc); display(plot_ALL_LOL_nowc) 
-    display(plot_ALL_Regret_globalwc); display(plot_ALL_Ratio_globalwc); display(plot_ALL_Difference_globalwc); display(plot_ALL_LOL_globalwc)
-    display(plot_ALL_Regret_localwc);  display(plot_ALL_Ratio_localwc);  display(plot_ALL_Difference_localwc); display(plot_ALL_LOL_localwc)
-
-    display(plot_kmeans_Regret);   display(plot_kmeans_Ratio);   display(plot_kmeans_Difference); display(plot_kmeans_LOL)
-    display(plot_kmedoids_Regret); display(plot_kmedoids_Ratio); display(plot_kmedoids_Difference); display(plot_kmedoids_LOL);
-    display(plot_hull_Regret);     display(plot_hull_Ratio);     display(plot_hull_Difference); display(plot_hull_LOL);
-    
-    
-    save_plots(output_dir)
-end
-
-#///////////////////////////////////////////////////////////////////////////////////////////////
-
 function plot_gallery_regret_byWeightType(results, clustering_method, output_dir)
     weight_types = ["dirac", "convex", "conical", "conical_bounded"]
     wc_options = [
@@ -203,17 +17,21 @@ function plot_gallery_regret_byWeightType(results, clustering_method, output_dir
 
         p = plot(
             title          = wtype,
-            xlabel         = "Number of representative periods (k)",
-            ylabel         = is_first ? "Relative Regret [%]" : "",
-            yscale         = :log10,
-            yticks         = ([0.1, 1, 10, 100], ["0.1", "1", "10", "100"]),
+            xlabel         = "", #"Number of representative periods (k)",
+            ylabel         = is_first ? "Regret (%)" : "",
+            # yscale         = :log10,
+            # yticks         = ([0.1, 1, 10, 100], ["0.1", "1", "10", "100"]),
             yformatter     = is_first ? :auto : _ -> "",
-            ylim           = (0.01, 900),
+            # ylim           = (0.01, 900),
             legend         = col_idx == 4 ? :topright : false,
             legendfontsize = 14,
             titlefontsize  = 16,
-            guidefontsize  = 14,
+            guidefontsize  = 18,
+            left_margin    = col_idx == 1 ? 15Plots.mm : 0Plots.mm,
             grid           = true,
+            xtickfontsize    = 15,
+            ytickfontsize    = 15,
+            tickfontfamily   = "Times Bold",
         )
         #hline!(p, [0.01], linestyle=:dash, color=:black, label="reference")
 
@@ -235,126 +53,33 @@ function plot_gallery_regret_byWeightType(results, clustering_method, output_dir
         push!(subplots, p)
     end
 
+    method_display = clustering_method == "kmedoids" ? "k-medoids" : "k-means" 
     gallery = plot(
         subplots...;
         layout             = (1, 4),
-        size               = (2500, 600),
-        plot_title         = "Regret vs number of RPs (k) using $clustering_method",
+        size               = (2500, 700),
+        plot_title         = "Regret vs number of RPs (k) using $method_display",
         plot_titlefontsize = 20,
-        titlefontsize      = 16,
-        guidefontsize      = 14,
-        legendfontsize     = 14,
-        left_margin        = 12Plots.mm,
+        titlefontsize      = 18,
+        guidefontsize      = 18,
+        legendfontsize     = 16,
         right_margin       = 4Plots.mm,
-        top_margin         = 8Plots.mm,
-        bottom_margin      = 10Plots.mm,
+        top_margin         = 0Plots.mm,
+        bottom_margin      = 14Plots.mm,
     )
+    
+    
+    xlabel_text = "Number of representative periods (k)"
+    offset = clustering_method == "kmedoids" ? -0.8 : -1.7 
+    annotate!(gallery[3], -5.0, offset, text(xlabel_text, 18, :center, :top))
+    
 
     display(gallery)
-    savefig(gallery, joinpath(output_dir, "gallery_$(clustering_method)_regret.png"))
+    savefig(gallery, joinpath(output_dir, "gallery_$(clustering_method)_regret_0.pdf"))
 end
 
 
-#///
-function plot_gallery_regret_byWeightType_Split(results, clustering_method, output_dir)
-    weight_types = ["dirac", "convex", "conical", "conical_bounded"]
-    wc_options = [
-        ("no_wc", :circle),
-        ("global_wc", :diamond),
-        ("global_fixed_wc_p10.0", :utriangle),
-        ("local_wc", :square),
-        #("global_wc_before", :dtriangle),
-        #("local_before_wc", :pentagon),
-    ]
-    colors = [:blue, :red, :green, :purple, :orange, :yellow]
-    subplots = []
-    for wtype in weight_types
-        # TOP subplot (large regrets)
-        p_top = plot(
-            title = "$(wtype)",
-            xlabel = "",
-            ylabel = "Regret (%)",
-            ylim = (10, 220),
-            legend = :topright,
-            grid = true
-        )
-
-        # BOTTOM subplot (small regrets)
-        p_bottom = plot(
-            
-            ylabel = "Regret (%)",
-            ylim = (0, 12),
-            legend = false,
-            grid = true
-        )
-        hline!(p_bottom, [0.0], linestyle=:dash, color=:black, label="reference")
-        for ((wc_label, lmarker), color) in zip(wc_options, colors)
-            method_label = "$(clustering_method)_$(wtype)_$(wc_label)_2"
-            df = filter(r -> r.method == method_label, results)
-            isempty(df) && continue
-
-            # Plot on BOTH axes
-            plot!(
-                p_top,
-                df.k,
-                df.regret,
-                label = wc_label,
-                marker = lmarker,
-                color = color,
-                linestyle = :solid,
-                ribbon = hasproperty(df, :regret_std) ?
-                         df.regret_std :
-                         zeros(nrow(df)),
-                fillalpha = 0.08
-            )
-
-            plot!(
-                p_bottom,
-                df.k,
-                df.regret,
-                label = wc_label,
-                marker = lmarker,
-                color = color,
-                linestyle = :solid,
-                ribbon = hasproperty(df, :regret_std) ?
-                         df.regret_std :
-                         zeros(nrow(df)),
-                fillalpha = 0.08
-            )
-        end
-        # Combine top + bottom
-        combined = plot(
-            p_top,
-            p_bottom,
-            layout = @layout([a; b]),
-            size = (700, 300),
-            margin = 5Plots.mm
-        )
-        push!(subplots, combined)
-    end
-
-    # Final gallery
-    gallery = plot(
-        subplots...,
-        layout = (1, 4),
-        size = (2000, 800),
-        plot_title = "$clustering_method: Regret vs number of RPs (k)",
-        plot_titlefontsize = 20,
-        titlefontsize = 16,
-        guidefontsize = 14,
-        legendfontsize = 10,
-        xlabel = "Number of representative periods (k)",
-        margin = 6Plots.mm
-    )
-    display(gallery)
-    savefig(
-        gallery,
-        joinpath(output_dir,
-        "gallery_$(clustering_method)_regret_broken_axis.png")
-    )
-end
-
-function plot_gallery_regret_byWeightType_Split2(results, clustering_method, output_dir) # used
+function plot_gallery_regret_byWeightType_Split(results, clustering_method, output_dir; cross_scenario = False) # used
     weight_types = ["dirac", "convex", "conical_bounded", "conical"]
     wc_options = [
         ("no_wc",                 :circle,    "None"),
@@ -376,7 +101,7 @@ function plot_gallery_regret_byWeightType_Split2(results, clustering_method, out
             xlabel        = "",
             ylabel        = is_first ? "Regret (%)" : "",
             yformatter     = is_first ? :auto : _ -> "",
-            ylim          = (12, max_range), 
+            ylim          = cross_scenario ? (15, 1000) : (12, max_range), 
             legend        = is_last ? :topright : false,
             titlefontsize = 16,
             legendmarkersize   = 18,
@@ -393,7 +118,7 @@ function plot_gallery_regret_byWeightType_Split2(results, clustering_method, out
             xlabel        = "",
             ylabel        = is_first ? "Regret (%)" : "",
             yformatter     = is_first ? :auto : _ -> "",
-            ylim          = (0, 15),
+            ylim          = cross_scenario ? (0, 25) : (0, 15),
             legend        = false,
             grid          = true,
             left_margin      = is_first ? 14Plots.mm : 0Plots.mm,
@@ -455,11 +180,13 @@ function plot_gallery_regret_byWeightType_Split2(results, clustering_method, out
     # Single centered x-label drawn as an annotation on the last bottom subplot
     xlabel_text = "Number of representative periods (k)"
     offset = clustering_method == "kmedoids" ? -3.3 : -3.3 
+    offset = cross_scenario ? -6 : offset
     annotate!(gallery[7], -15.0, offset, text(xlabel_text, 16, :center, :top))
     
     display(gallery)
+    add = cross_scenario ? "_cross" : ""
     savefig(gallery, joinpath(output_dir,
-        "gallery_$(clustering_method)_regret_broken_axis.pdf"))
+        "gallery_$(clustering_method)$(add)_regret_broken_axis.pdf"))
 end
 
 
@@ -469,12 +196,11 @@ end
 function plot_gallery_LOL_byWeightType(results, clustering_method,  output_dir, lol_ref) #used
     weight_types = ["dirac", "convex", "conical_bounded", "conical"]
     wc_options = [
-         #("no_wc",                 :circle,    "None"),
+        ("no_wc",                 :circle,    "None"),
         ("global_wc",             :diamond,   "Global"),
         ("global_fixed_wc_p10.0", :utriangle, "Global-Fixed"),
         ("local_wc",              :square,    "Local"),
-        # ("global_wc_before", :dtriangle), 
-        # ("local_before_wc", :pentagon),
+        
     ]
     colors = [:blue, :red, :green, :purple, :orange, :yellow]
     subplots = []
@@ -484,17 +210,17 @@ function plot_gallery_LOL_byWeightType(results, clustering_method,  output_dir, 
         p = plot(
             title          = wtype,
             xlabel         = "",
+            ylim           = clustering_method == "kmedoids" ? (0, 1400) : (0,4500),
             ylabel         = is_first ? "Loss of Load" : "",
             yformatter     = is_first ? :auto : _ -> "",
             legend         = is_last ? :topright : false,
             titlefontsize  = 16,
             guidefontsize  = 14,
             xtickfontsize    = 15,
-            ytickfontsize    = 14,
+            ytickfontsize    = 15,
             tickfontfamily   = "Times Bold",
             left_margin      = is_first ? 14Plots.mm : 0Plots.mm,
-            top_margin     = 8Plots.mm,
-            bottom_margin  = 2Plots.mm,
+          
         )
         hline!(p, [lol_ref], linestyle=:dash, color=:black, label="Reference")
 
@@ -514,28 +240,28 @@ function plot_gallery_LOL_byWeightType(results, clustering_method,  output_dir, 
     method = clustering_method == "kmedoids" ? "k-medoids" : "k-means"
     gallery = plot(subplots...;
                    layout             = (1, 4),
-                   size               = (2200, 520),
+                   size               = (2200, 700),
                    plot_title         = "Loss of Load vs number of RPs (k) using $method",
                    plot_titlefontsize = 20,
-                   titlefontsize      = 16,
-                   guidefontsize      = 14,
-                   legendfontsize     = 15,
-                   legendmarkersize   = 18,
-                   top_margin         = 0Plots.mm,
-                   bottom_margin      = 12Plots.mm)
+                   titlefontsize      = 18,
+                   guidefontsize      = 18,
+                   legendfontsize     = 16,
+                   legendmarkersize   = 20,
+                   top_margin         = 2Plots.mm,
+                   bottom_margin      = 15Plots.mm)
 
     xlabel_text = "Number of representative periods (k)"
-    offset = clustering_method == "kmedoids" ? -190 : -520 
-    annotate!(gallery[3], -20, offset, text(xlabel_text, 16, :center, :top))
+    offset = clustering_method == "kmedoids" ? -120 : -390
+    annotate!(gallery[3], -20, offset, text(xlabel_text, 18, :center, :top))
     
     display(gallery)
-    savefig(gallery, joinpath(output_dir, "gallery_$(clustering_method)_LOL.pdf"))
+    savefig(gallery, joinpath(output_dir, "gallery_$(clustering_method)_LOL_0.pdf"))
 end
 
 
 
 ###############
-function plot_gallery_LOL_byWeightType_Split(results, clustering_method, output_dir, lol_ref) #used
+function plot_gallery_LOL_byWeightType_Split(results, clustering_method, output_dir, lol_ref; cross_scenario = False) #used
     weight_types = ["dirac", "convex", "conical_bounded", "conical"]
     wc_options = [
         ("no_wc",                 :circle,    "None"),
@@ -561,7 +287,7 @@ function plot_gallery_LOL_byWeightType_Split(results, clustering_method, output_
             legend         = is_last ? :topright : false,
             titlefontsize  = 16,
             legendmarkersize = 18,
-            ylim           = (55, 3000),
+            ylim           = cross_scenario ? (20,1200) : (55, 3000),
             grid           = true,
             left_margin    = is_first ? 14Plots.mm : 0Plots.mm,
             bottom_margin  = 5Plots.mm,
@@ -576,7 +302,7 @@ function plot_gallery_LOL_byWeightType_Split(results, clustering_method, output_
             xlabel         = "",
             ylabel         = is_first ? "Loss of Load" : "",
             yformatter     = is_first ? :auto : _ -> "",
-            ylim           = (-1, 50),
+            ylim           = cross_scenario ? (-1, 30) : (-1, 50),
             legend         = false,
             grid           = true,
             left_margin    = is_first ? 14Plots.mm : 0Plots.mm,
@@ -637,34 +363,44 @@ function plot_gallery_LOL_byWeightType_Split(results, clustering_method, output_
 
     xlabel_text = "Number of representative periods (k)"
     offset = clustering_method == "kmedoids" ? -4.5 : -11
+    offset = cross_scenario ? -7 : offset 
     annotate!(gallery[7], -15.0, offset, text(xlabel_text, 16, :center, :top))
 
     display(gallery)
-    savefig(gallery, joinpath(output_dir, "gallery_$(clustering_method)_LOL.pdf"))
+    add = cross_scenario ? "_cross" : ""
+    savefig(gallery, joinpath(output_dir, "gallery_$(clustering_method)$(add)_LOL_broken_axis.pdf"))
 end
 
 
 ################
 
-function plot_gallery_regret_byWorstCase(results, clustering_method,  output_dir)
+function plot_gallery_regret_byWorstCase(results, clustering_method,  output_dir, ; cross_scenario = False)
     weight_types = [
         ("dirac", :circle), 
         ("convex", :diamond), 
-        ("conical", :square), 
-        ("conical_bounded", :pentagon ),
+        ("conical_bounded", :square),
+        ("conical", :utriangle), 
     ]
     wc_options = [
-        "no_wc",
-        "global_wc",
-        "global_fixed_wc_p10.0",
-        "local_wc",
+        ("no_wc", "None"),
+        ("global_fixed_wc_p10.0", "Global-fixed"),
+        ("global_wc", "Global"),
+        ("local_wc", "Local"),
     ]
     colors = [:blue, :red, :green, :purple, :orange]
 
     subplots = []
-    for wc_label in wc_options
-        p = plot(title="$(wc_label)", xlabel="Number of representative periods (k)", ylabel="Regret (%)")
-        hline!(p, [0.0], linestyle=:dash, color=:black, label="reference")
+    for (i, (wc_label, wc_display)) in enumerate(wc_options)
+        is_First = i == 1;
+        p = plot(
+            title="$(wc_display)", 
+            xlabel="Number of representatives (k)", 
+            ylabel=  is_First ? "Regret (%)" : "",
+            left_margin = is_First ? 15Plots.mm : 0Plots.mm,
+            xtickfontsize  = 15,
+            ytickfontsize  = 15,
+            tickfontfamily = "Times Bold",
+            )
         
         for ((wtype, lmarker), color) in zip(weight_types, colors)
             method_label = "$(clustering_method)_$(wtype)_$(wc_label)_2"
@@ -678,37 +414,49 @@ function plot_gallery_regret_byWorstCase(results, clustering_method,  output_dir
         end
         push!(subplots, p)
     end
-
-    gallery = plot(subplots..., layout=(2, 2), size=(1500, 1200),
-                   plot_title="$clustering_method: Regret vs number of RPs (k)",
+    method_display = clustering_method == "kmedoids" ? "k-medoids" : "k-means"
+    gallery = plot(subplots..., layout=(1, 4), size=(2500, 700),
+                   plot_title="$method_display: Regret vs number of RPs (k)",
                    titlefontsize=18,
                    plot_titlefontsize=20,
-                   guidefontsize=16,      # x/y axis labels
-                   legendfontsize=11,     # legend entries
-                   left_margin=9mm, bottom_margin=4mm)
+                   guidefontsize=18,      # x/y axis labels
+                   legendfontsize=16,     # legend entries
+                   bottom_margin=14mm,
+                   )
+
+    add = cross_scenario ? "cross_" : ""
     display(gallery)
-    savefig(gallery, joinpath(output_dir, "gallery_$(clustering_method)_regret_byWorstCase.png"))
+    savefig(gallery, joinpath(output_dir, "gallery_$(clustering_method)$(add)_regret_byWorstCase.pdf"))
 end
 
 
-function plot_gallery_LOL_byWorstCase(results, clustering_method,  output_dir, lol_ref)
+function plot_gallery_LOL_byWorstCase(results, clustering_method,  output_dir, lol_ref, ; cross_scenario = False)
     weight_types = [
         ("dirac", :circle), 
         ("convex", :diamond), 
-        ("conical", :square), 
-        ("conical_bounded", :pentagon ),
+         ("conical_bounded", :square),
+        ("conical", :utriangle), 
     ]
     wc_options = [ 
-        "no_wc",
-        "global_wc",
-        "global_fixed_wc_p10.0",
-        "local_wc",
+        ("no_wc", "None"),
+        ("global_fixed_wc_p10.0", "Global-fixed"),
+        ("global_wc", "Global"),
+        ("local_wc", "Local")
     ]
     colors = [:blue, :red, :green, :purple, :orange]
 
     subplots = []
-    for wc_label in wc_options
-        p = plot(title="$(wc_label)", xlabel="Number of representatives (k)", ylabel="Loss of Load")
+    for (i, (wc_label, wc_display)) in enumerate(wc_options)
+        is_First = i == 1;
+        p = plot(
+            title="$(wc_display)", 
+            xlabel="Number of representatives (k)", 
+            ylabel=  is_First ? "Loss of Load" : "",
+            left_margin = is_First ? 15Plots.mm : 0Plots.mm,
+            xtickfontsize  = 15,
+            ytickfontsize  = 15,
+            tickfontfamily = "Times Bold",
+            )
         hline!(p, [lol_ref], linestyle=:dash, color=:black, label="reference")
 
         for ((wtype, lmarker), color) in zip(weight_types, colors)
@@ -716,7 +464,8 @@ function plot_gallery_LOL_byWorstCase(results, clustering_method,  output_dir, l
             df = filter(r -> r.method == method_label, results)
             isempty(df) && continue
             plot!(p, df.k, df.lol_reduced,
-                  label=wtype, marker=lmarker, color=color,
+                  label=wtype, marker=lmarker, 
+                  color=color,
                   linestyle=:solid,
                   ribbon=hasproperty(df, :lol_reduced_std) ? df.lol_reduced_std : zeros(nrow(df)),
                   fillalpha=0.08)
@@ -724,17 +473,21 @@ function plot_gallery_LOL_byWorstCase(results, clustering_method,  output_dir, l
         push!(subplots, p)
     end
 
-    gallery = plot(subplots..., layout=(2, 2), size=(1500, 1200),
-                   plot_title="$clustering_method: LOL vs number of RPs (k)",
+    method_display = clustering_method == "kmeans" ? "k-means" : "k-medoids"
+    gallery = plot(subplots..., layout=(1, 4), size=(2500, 700),
+                   plot_title="$method_display: Loss of load vs number of RPs (k)",
                    titlefontsize=18,
                    plot_titlefontsize=20,
-                   guidefontsize=16,      # x/y axis labels
-                   legendfontsize=11,     # legend entries
+                   guidefontsize=18,      # x/y axis labels
+                   legendfontsize=14,     # legend entries
                    legend = :topleft,
-                   left_margin=9mm, bottom_margin=4mm)
+                   bottom_margin=14mm,
+                   )
+    add = cross_scenario ? "cross_" : "" 
     display(gallery)
-    savefig(gallery, joinpath(output_dir, "gallery_$(clustering_method)_LOL_byWorstCase.png"))
+    savefig(gallery, joinpath(output_dir, "gallery_$(clustering_method)$(add)_LOL_byWorstCase.pdf"))
 end
+
 
 
 
@@ -745,8 +498,6 @@ end
 
 #///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #Plotting for the global fixed different values 
-
-#TODO the reference global one is not correct. i mean it seems to be but i dont have the std
 function plot_gallery_regret_globalFixed_byPercentage(results, clustering_method, output_dir)
     weight_types = ["dirac", "convex", "conical", "conical_bounded"]
     # one line per percentage, distinguished by color
@@ -833,6 +584,77 @@ function plot_gallery_regret_globalFixed_byPercentage(results, clustering_method
 end
 
 
+function plot_gallery_regret_globalFixed_byPercentage_Dirac(results, clustering_method, output_dir)
+    percentages = sort(unique(filter(r -> r.worst_case == "global_fixed_wc", results).percentage))
+    colors      = palette(:lightrainbow, max(length(percentages), 2))
+    markers     = [:circle, :diamond, :square, :utriangle, :pentagon, :hexagon]
+
+    method = clustering_method == "kmedoids" ? "k-medoids" : "k-means"
+
+    p = plot(
+        title          = "Regret vs number of representative periods (k) using $method",
+        xlabel         = "Number of representative periods (k)",
+        ylabel         = "Regret (%)",
+        yscale         = :log10,
+        yticks         = ([0.01, 0.1, 1, 10, 100, 1000], ["0.01", "0.1", "1", "10", "100", "1000"]),
+        ylim           = (0.005, 2000),
+        legend         = :topright,
+        titlefontsize  = 20,
+        legendfontsize = 14,
+        guidefontsize  = 18,
+        tickfontsize   = 13,
+        grid           = true,
+        size           = (1200, 700),
+        left_margin    = 10Plots.mm,
+        bottom_margin  = 8Plots.mm,
+        top_margin     = 8Plots.mm,
+        right_margin   = 4Plots.mm,
+    )
+
+    for (i, pct) in enumerate(percentages)
+        percentage   = pct * 100
+        method_label = "$(clustering_method)_dirac_global_fixed_wc_p$(percentage)_2"
+        df = filter(r -> r.method == method_label, results)
+        isempty(df) && continue
+
+        k_unique = sort(unique(df.k))
+        xmap     = Dict(k => idx for (idx, k) in enumerate(k_unique))
+        xvals    = [xmap[k] for k in df.k]
+
+        regret_clamped = max.(df.regret, 0.005)
+
+        plot!(p, xvals, regret_clamped;
+            label     = "$(percentage)%",
+            marker    = markers[min(i, length(markers))],
+            color     = colors[i],
+            linestyle = :solid,
+            xticks    = (1:length(k_unique), string.(k_unique)),
+            # ribbon    = hasproperty(df, :regret_std) ? max.(df.regret_std, 0.0) : zeros(nrow(df)),
+            # fillalpha = 0.08
+            )
+    end
+
+    method_label_global = "$(clustering_method)_dirac_global_wc_2"
+    df_global = filter(r -> r.method == method_label_global, results)
+    if !isempty(df_global)
+        k_unique = sort(unique(df_global.k))
+        xmap     = Dict(k => idx for (idx, k) in enumerate(k_unique))
+        xvals    = [xmap[k] for k in df_global.k]
+        regret_clamped = max.(df_global.regret, 0.005)
+        plot!(p, xvals, regret_clamped;
+            label     = "Global (dynamic)",
+            color     = :black,
+            linestyle = :dash,
+            marker    = :star5,
+            xticks    = (1:length(k_unique), string.(k_unique)))
+    end
+
+    display(p)
+    savefig(p, joinpath(output_dir,
+        "$(clustering_method)_globalFixed_dirac_regret_byPercentage.pdf"))
+end
+
+
 function plot_gallery_LOL_globalFixed_byPercentage(results, clustering_method, output_dir, lol_ref)
     weight_types = ["dirac", "convex", "conical", "conical_bounded"]
     percentages  = sort(unique(filter(r -> r.worst_case == "global_fixed_wc", results).percentage))
@@ -888,6 +710,7 @@ function plot_gallery_LOL_globalFixed_byPercentage(results, clustering_method, o
 end
 
 
+
 function plot_gallery_globalFixed_regret_and_LOL(results, clustering_method, output_dir, lol_ref)
     weight_types = ["dirac", "convex", "conical", "conical_bounded"]
     percentages  = sort(unique(filter(r -> r.worst_case == "global_fixed_wc", results).percentage))
@@ -899,14 +722,19 @@ function plot_gallery_globalFixed_regret_and_LOL(results, clustering_method, out
     for wtype in weight_types
         # ── Left: Regret ──────────────────────────────────────────────────
         p_regret = plot(
-            title     = "$(wtype) - Regret",
-            xlabel    = "k",
+            xlabel    = "Number of representative periods (k)",
             ylabel    = "Regret (%)",
+            yscale         = :log10,
+            yticks         = ([0.01, 0.1, 1, 10, 100, 1000], ["0.01", "0.1", "1", "10", "100", "1000"]),
+            ylim           = (0.005, 2000),
             legend    = false,
-            yscale    = :log10,
             grid      = true,
+            left_margin        = 18Plots.mm,
+            xtickfontsize  = 16,
+            ytickfontsize  = 16,
+            tickfontfamily = "Times Bold",
         )
-        hline!(p_regret, [0.1]; linestyle=:dash, color=:black, label="reference")
+        # hline!(p_regret, [0.1]; linestyle=:dash, color=:black, label="reference")
 
         for (i, pct) in enumerate(percentages)
             
@@ -918,15 +746,17 @@ function plot_gallery_globalFixed_regret_and_LOL(results, clustering_method, out
             k_unique = sort(unique(df.k))
             xmap     = Dict(k => idx for (idx, k) in enumerate(k_unique))
             xvals    = [xmap[k] for k in df.k]
-
-            plot!(p_regret, xvals, df.regret;
+            #Avoid log(0)
+            regret_clamped = max.(df.regret, 0.005)
+            plot!(p_regret, xvals, regret_clamped;
                 label     = "$(percentage)%",
                 marker    = markers[min(i, length(markers))],
                 color     = colors[i],
                 linestyle = :solid,
                 xticks    = (1:length(k_unique), string.(k_unique)),
-                ribbon    = hasproperty(df, :regret_std) ? df.regret_std : zeros(nrow(df)),
-                fillalpha = 0.08)
+                # ribbon    = hasproperty(df, :regret_std) ? df.regret_std : zeros(nrow(df)),
+                # fillalpha = 0.08
+                )
         end
 
         method_label_global = "$(clustering_method)_$(wtype)_global_wc_2"
@@ -935,8 +765,9 @@ function plot_gallery_globalFixed_regret_and_LOL(results, clustering_method, out
             k_unique = sort(unique(df_global.k))
             xmap     = Dict(k => idx for (idx, k) in enumerate(k_unique))
             xvals    = [xmap[k] for k in df_global.k]
-            plot!(p_regret, xvals, df_global.regret;
-                label     = "global wc",
+            regret_clamped = max.(df_global.regret, 0.005)
+            plot!(p_regret, xvals, regret_clamped;
+                label     = "Global worst-case",
                 color     = :black,
                 linestyle = :dash,
                 marker    = :star5,
@@ -945,11 +776,17 @@ function plot_gallery_globalFixed_regret_and_LOL(results, clustering_method, out
 
         # ── Right: Loss of Load ───────────────────────────────────────────
         p_lol = plot(
-            title     = "$(wtype) - Loss of Load",
-            xlabel    = "k",
+            xlabel    = "Number of representative periods (k)",
             ylabel    = "Loss of Load",
             legend    = :topright,
             grid      = true,
+            yscale    = :log10,
+            yticks    = ([1, 10, 100, 1000], ["1", "10", "100", "1000"]),
+            ylim      = (0.05, 5000),
+            left_margin        = 10Plots.mm,
+            xtickfontsize  = 16,
+            ytickfontsize  = 16,
+            tickfontfamily = "Times Bold",
         )
         hline!(p_lol, [lol_ref]; linestyle=:dash, color=:black, label="reference")
 
@@ -963,48 +800,63 @@ function plot_gallery_globalFixed_regret_and_LOL(results, clustering_method, out
             k_unique = sort(unique(df.k))
             xmap     = Dict(k => idx for (idx, k) in enumerate(k_unique))
             xvals    = [xmap[k] for k in df.k]
-
-            plot!(p_lol, xvals, df.lol_reduced;
+            
+            lol_clamped = max.(df.lol_reduced, 0.05)
+            plot!(p_lol, xvals, lol_clamped;
                 label     = "$(percentage)%",
                 marker    = markers[min(i, length(markers))],
                 color     = colors[i],
                 linestyle = :solid,
                 xticks    = (1:length(k_unique), string.(k_unique)),
-                ribbon    = hasproperty(df, :lol_reduced_std) ? df.lol_reduced_std : zeros(nrow(df)),
-                fillalpha = 0.08)
+                # ribbon    = hasproperty(df, :lol_reduced_std) ? df.lol_reduced_std : zeros(nrow(df)),
+                # fillalpha = 0.08
+                )
         end
 
         if !isempty(df_global)
             k_unique = sort(unique(df_global.k))
             xmap     = Dict(k => idx for (idx, k) in enumerate(k_unique))
             xvals    = [xmap[k] for k in df_global.k]
-            plot!(p_lol, xvals, df_global.lol_reduced;
-                label     = "global wc",
+            lol_clamped = max.(df_global.lol_reduced, 0.05)
+            plot!(p_lol, xvals, lol_clamped;
+                label     = "Global worst-case",
                 color     = :black,
                 linestyle = :dash,
                 marker    = :star5,
-                xticks    = (1:length(k_unique), string.(k_unique)))
-        end
+                xticks    = (1:length(k_unique), string.(k_unique))
+                )
 
+        end
+        
         push!(subplots, p_regret)
         push!(subplots, p_lol)
     end
 
-    # 4 weight types × 2 plots = 8 subplots, laid out as 4 rows × 2 cols
+    method_display =  clustering_method == "kmedoids" ? "k-medoids" : "k-means"
     gallery = plot(subplots...;
         layout             = (4, 2),
-        size               = (1600, 2200),
-        plot_title         = "$clustering_method: Global-Fixed Regret and Loss of Load",
-        plot_titlefontsize = 18,
-        titlefontsize      = 13,
-        guidefontsize      = 12,
-        legendfontsize     = 9,
-        left_margin        = 8mm,
-        bottom_margin      = 5mm)
+        size               = (2200, 2800),
+        plot_title         = "$method_display: Global-Fixed Regret and Loss of Load for different fixed weights",
+        plot_titlefontsize = 20,
+        titlefontsize      = 18,
+        guidefontsize      = 18,
+        legendfontsize     = 14,
+        markersize = 6,
+        markerstrokewidth   = 0.1,
+        right_margin       = 4Plots.mm,
+        bottom_margin      = 8Plots.mm,
+        top_margin         = 8Plots.mm,
+        )
 
+    for (i, wtype) in enumerate(weight_types)
+        xlabel_text = "$wtype"
+        yoffset = i == 1 ? 13220.0 : 13500.0
+        annotate!(gallery[i*2], -1.0, yoffset, text(xlabel_text, 18, :center, :top))
+
+    end    
     display(gallery)
     savefig(gallery, joinpath(output_dir,
-        "gallery_$(clustering_method)_globalFixed_regret_and_LOL.png"))
+        "gallery_$(clustering_method)_globalFixed_regret_and_LOL.pdf"))
 end
 
 
@@ -1284,190 +1136,8 @@ function plot_profiles_combined(all_reg_demand, all_reg_avail, all_wc_demand, al
 end
 
 
-#////////////////////////////////////////////////////////////////////////////////////////////////////
-function plot_scatter_regret_vs_wcweight_byWC(results, clustering_method, output_dir)
-    wc_options = ["global_wc", "local_wc"]
-    weight_types = [
-        ("dirac",            :circle,    colorant"#1f77b4"),
-        ("convex",           :diamond,   colorant"#2ca02c"),
-        ("conical",          :square,    colorant"#d62728"),
-        ("conical_bounded",  :utriangle, colorant"#9467bd"),
-    ]
-    
-    k_values = sort(unique(results.k))
-    k_min, k_max = minimum(k_values), maximum(k_values)
-
-    subplots = []
-    for wc_label in wc_options
-        p = plot(
-            title      = wc_label,
-            xlabel     = "Average WC weight (days)",
-            ylabel     = "Regret (%)",
-            legend     = :topright,
-            grid       = true,
-            ylim       = (0, 20),
-        )
-
-        for (wtype, marker, base_color) in weight_types
-            method_label = "$(clustering_method)_$(wtype)_$(wc_label)_2"
-            df = filter(r -> r.method == method_label, results)
-            isempty(df) && continue
-
-            for row in eachrow(df)
-                t = (log(row.k) - log(k_min)) / (log(k_max) - log(k_min))
-                faded = weighted_color_mean(1 - 0.75 * t, base_color, colorant"white")
-                scatter!(p, [row.avg_weight_wc], [row.regret];
-                    label      = (row.k == k_values[1]) ? wtype : "",
-                    color      = faded,
-                    marker     = marker,
-                    markersize = 7,
-                    alpha      = 0.9)
-            end
-        end
-        push!(subplots, p)
-    end
-
-    gallery = plot(subplots...;
-        layout             = (1, 2),
-        size               = (1400, 600),
-        plot_title         = "$clustering_method: Regret vs WC weight by strategy",
-        plot_titlefontsize = 18,
-        titlefontsize      = 14,
-        guidefontsize      = 12,
-        legendfontsize     = 10,
-        margin             = 6Plots.mm)
-    display(gallery)
-    savefig(gallery, joinpath(output_dir, "scatter_$(clustering_method)_regret_vs_wcweight_byWC.png"))
-end
-
-function plot_scatter_regret_vs_wcweight_byWeightType(results, clustering_method, output_dir)
-    weight_types = ["dirac", "convex", "conical", "conical_bounded"]
-    wc_styles = [
-        ("global_wc",  :diamond,   colorant"#1f77b4"),
-        ("local_wc",   :square,    colorant"#d62728"),
-    ]
-
-    k_values = sort(unique(results.k))
-    k_min, k_max = minimum(k_values), maximum(k_values)
-
-    subplots = []
-    for wtype in weight_types
-        p = plot(
-            title      = wtype,
-            xlabel     = "Average WC weight (days)",
-            ylabel     = "Regret (%)",
-            legend     = :topright,
-            grid       = true,
-            ylim       = (0, 20),
-        )
-
-        for (wc_label, marker, base_color) in wc_styles
-            method_label = "$(clustering_method)_$(wtype)_$(wc_label)_2"
-            df = filter(r -> r.method == method_label, results)
-            isempty(df) && continue
-
-            for row in eachrow(df)
-                t = (log(row.k) - log(k_min)) / (log(k_max) - log(k_min))
-                faded = weighted_color_mean(1 - 0.75 * t, base_color, colorant"white")
-                scatter!(p, [row.avg_weight_wc], [row.regret];
-                    label      = (row.k == k_values[1]) ? wc_label : "",
-                    color      = faded,
-                    marker     = marker,
-                    markersize = 7,
-                    alpha      = 0.9)
-            end
-        end
-        push!(subplots, p)
-    end
-
-    gallery = plot(subplots...;
-        layout             = (2, 2),
-        size               = (1400, 1200),
-        plot_title         = "$clustering_method: Regret vs WC weight by weight type",
-        plot_titlefontsize = 18,
-        titlefontsize      = 14,
-        guidefontsize      = 12,
-        legendfontsize     = 10,
-        margin             = 6Plots.mm)
-    display(gallery)
-    savefig(gallery, joinpath(output_dir, "scatter_$(clustering_method)_regret_vs_wcweight_byWeightType.png"))
-end
-
-
-
-
-
-
-
-
-
 #////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-#Use this to save any plot you want  (output_dir = "my-awesome-energy-system/tutorial-9/results")
-#savefig(plot_ALL_Ratio, joinpath(output_dir, "ratio_vs_k_nowc.png"));
-
-function save_plots(output_dir)
-    for (p, filename) in [
-        (plot_ALL_Regret_nowc,         "regret_nowc.png"),
-        (plot_ALL_Ratio_nowc,          "ratio_nowc.png"),
-        (plot_ALL_Difference_nowc,     "diff_nowc.png"),
-        (plot_ALL_Regret_globalwc,     "regret_globalwc.png"),
-        (plot_ALL_Ratio_globalwc,      "ratio_globalwc.png"),
-        (plot_ALL_Difference_globalwc, "diff_globalwc.png"),
-        (plot_ALL_Regret_localwc,      "regret_localwc.png"),
-        (plot_ALL_Ratio_localwc,       "ratio_localwc.png"),
-        (plot_ALL_Difference_localwc,  "diff_localwc.png"),
-        (plot_kmeans_Regret,   "regret_kmeans.png"),
-        (plot_kmeans_Ratio,    "ratio_kmeans.png"),
-        (plot_kmeans_Difference, "diff_kmeans.png"),
-        (plot_kmedoids_Regret,   "regret_kmedoids.png"),
-        (plot_kmedoids_Ratio,    "ratio_kmedoids.png"),
-        (plot_kmedoids_Difference, "diff_kmedoids.png"),
-        (plot_hull_Regret,     "regret_hull.png"),
-        (plot_hull_Ratio,      "ratio_hull.png"),
-        (plot_hull_Difference, "diff_hull.png"),
-    ]
-        savefig(p, joinpath(output_dir, filename))
-    end
-
-end
-
-
-
-
-# function plot_avgWCweight_vs_k_localWC(results, clustering_method, output_dir)
-#     weight_types = [
-#         ("dirac",           :circle,    colorant"#1f77b4"),
-#         ("convex",          :diamond,   colorant"#2ca02c"),
-#         ("conical",         :square,    colorant"#d62728"),
-#         ("conical_bounded", :utriangle, colorant"#9467bd"),
-#     ]
-
-#     p = plot(
-#         title      = "$clustering_method: Avg WC weight vs k (local_wc)",
-#         xlabel     = "Number of representative periods (k)",
-#         ylabel     = "Average WC weight (days)",
-#         legend     = :topright,
-#         grid       = true,
-#     )
-
-#     for (wtype, marker, color) in weight_types
-#         method_label = "$(clustering_method)_$(wtype)_local_wc_2"
-#         df = filter(r -> r.method == method_label, results)
-#         isempty(df) && continue
-#         sort!(df, :k)
-#         plot!(p, df.k, df.avg_weight_wc;
-#             label      = wtype,
-#             marker     = marker,
-#             color      = color,
-#             linewidth  = 2,
-#             markersize = 7)
-#     end
-
-#     display(p)
-#     savefig(p, joinpath(output_dir, "avgWCweight_vs_k_localWC_$(clustering_method).png"))
-# end
 
 
 function plot_avgWCweight_vs_k(results, wc::Symbol, output_dir) #used
@@ -1484,6 +1154,8 @@ function plot_avgWCweight_vs_k(results, wc::Symbol, output_dir) #used
     wc_display = wc == :local ? "Local" : "Global"
 
     subplots = []
+    y_min = 0.0
+    y_max= 11.0
     
     for (idx, clustering_method) in enumerate(clustering_methods)
         is_First = idx == 1
@@ -1495,9 +1167,11 @@ function plot_avgWCweight_vs_k(results, wc::Symbol, output_dir) #used
             ylabel         = is_First ? "Average worst-case RP weight (days)" : "",
             #yformatter     = is_first ? :auto : _ -> "",
             legend         = is_Last ? :topright : false,
-            grid       = true,
+            grid           = true,
+            ylim = (y_min, y_max), yticks = y_min:1:y_max,
             top_margin     = 8Plots.mm,
             bottom_margin  = 4Plots.mm,
+            left_margin    = is_First ? 6Plots.mm : 0Plots.mm,
         )
         for (wtype, marker, color) in weight_types
             method_label = "$(clustering_method)_$(wtype)_$(wc_suffix)_2"
@@ -1530,7 +1204,7 @@ function plot_avgWCweight_vs_k(results, wc::Symbol, output_dir) #used
 
     gallery = plot(subplots...;
                    layout             = (1, 2),
-                   #size               = (1400, 900),
+                   size               = (1000, 700),
                    plot_title         = "Average worst-case RP weight vs number of RPs (k) ($wc_display)",
                    plot_titlefontsize = 14,
                    guidefontsize      = 13,
@@ -1547,8 +1221,8 @@ end
 function plot_maxWCweight_vs_k(results, wc::Symbol, output_dir) #used
     weight_types = [
         ("dirac",           :circle,    colorant"#1f77b4"),
-        ("convex",          :diamond,   colorant"#2ca02c"),
-        ("conical_bounded", :square,    colorant"#d62728"),
+        ("convex",          :diamond,   colorant"#d62728"),
+        ("conical_bounded", :square,    colorant"#2ca02c"),
         ("conical",         :utriangle, colorant"#9467bd"),   
     ]
 
@@ -1568,7 +1242,7 @@ function plot_maxWCweight_vs_k(results, wc::Symbol, output_dir) #used
         p = plot(
             title = method,
             titlefontsize = 14,
-            ylabel         = is_First ? "Maximum worst-case RP weight (days)" : "",
+            ylabel         = is_First ? "Worst-case RP weight (days)" : "",
             #yformatter     = is_first ? :auto : _ -> "",
             legend         = is_Last ? :topright : false,
             grid       = true,
@@ -1613,7 +1287,7 @@ function plot_maxWCweight_vs_k(results, wc::Symbol, output_dir) #used
     gallery = plot(subplots...;
                    layout             = (1, 2),
                    size               = (1000, 700),
-                   plot_title         = "Maximum worst-case RP weight vs number of RPs (k) ($wc_display)",
+                   plot_title         = "Worst-case RP weight vs number of RPs (k) ($wc_display)",
                    plot_titlefontsize = 14,
                    guidefontsize      = 14,
                    legendfontsize     = 12,
@@ -1632,23 +1306,23 @@ end
 function plot_avg_weights_vs_k(results, clustering_method, wc::Symbol, output_dir)
     weight_types = [
         ("dirac",           :circle,    colorant"#1f77b4"),
-        ("convex",          :diamond,   colorant"#2ca02c"),
-        ("conical",         :square,    colorant"#d62728"),
-        ("conical_bounded", :utriangle, colorant"#9467bd"),
+        ("convex",          :diamond,   colorant"#d62728"),
+        ("conical_bounded", :utriangle, colorant"#2ca02c"),
+        ("conical",         :square,    colorant"#9467bd"),
     ]
     wc_suffix = wc == :local ? "local_wc" : "global_wc"
-
+    method_display = clustering_method == :kmedoids ? "k-medoids" : "k-means" 
     p_normal = plot(
-        title      = "$clustering_method ($wc_suffix): Avg Normal RP weight vs k",
+        title      = "$method_display ($wc_suffix): Average mormal RP weight vs k",
         xlabel     = "Number of representative periods (k)",
         ylabel     = "Average normal RP weight (days)",
         legend     = :topright,
         grid       = true,
     )
     p_wc = plot(
-        title      = "$clustering_method ($wc_suffix): Avg WC weight vs k",
+        title      = "$method_display ($wc_suffix): Average worst-case weight vs k",
         xlabel     = "Number of representative periods (k)",
-        ylabel     = "Average WC weight (days)",
+        ylabel     = "Average worst-case weight (days)",
         legend     = :topright,
         grid       = true,
     )
@@ -1677,7 +1351,7 @@ function plot_avg_weights_vs_k(results, clustering_method, wc::Symbol, output_di
     combined = plot(p_normal, p_wc;
         layout             = (1, 2),
         size               = (1400, 600),
-        plot_title         = "$clustering_method: RP weights vs k ($wc_suffix)",
+        plot_title         = "$method_display: RP weights vs k ($wc_suffix)",
         plot_titlefontsize = 18,
         titlefontsize      = 14,
         guidefontsize      = 12,
@@ -1689,7 +1363,6 @@ function plot_avg_weights_vs_k(results, clustering_method, wc::Symbol, output_di
 end
 
 
-
 function plot_avg_local_wc_distance_vs_k(results, output_dir)
     clustering_methods = [
         ("kmedoids", :circle,  colorant"#1f77b4"),
@@ -1697,7 +1370,7 @@ function plot_avg_local_wc_distance_vs_k(results, output_dir)
     ]
 
     p = plot(
-        title      = "Avg distance (local WC to centroid) vs k",
+        title      = "Average distance (local worst-case to centroid) vs k",
         xlabel     = "Number of representative periods (k)",
         ylabel     = "Average distance (feature space)",
         legend     = :topright,
@@ -1735,17 +1408,6 @@ end
 
 
 ############################################################################################
-"""
-    plot_investment_decisions(results_agg, ref_decisions, ref_inv_cost, output_dir; 
-                              k_select=10, clustering_method="kmedoids", weight_type="dirac")
-
-Plots a grouped bar chart of investment decisions per asset and total investment cost
-for each global-fixed WC percentage, compared to the reference solution.
-
-Two y-axes are used: left for units invested per asset, right for total investment cost.
-Each technology group has one bar per percentage value plus one bar for the reference.
-The last group shows total investment cost on the right axis.
-"""
 function plot_investment_decisions(results_agg, ref_decisions, ref_inv_cost, output_dir;
                                    k_select=10,
                                    clustering_method="kmedoids",
@@ -1884,4 +1546,375 @@ function plot_investment_decisions(results_agg, ref_decisions, ref_inv_cost, out
     savefig(fig, fname)
     display(fig)
     
+end
+
+
+
+function plot_totalWeight_Local(results_agg, clustering_method, output_dir)
+    weight_types = [
+        ("dirac",           :circle,    colorant"#1f77b4"),
+        ("convex",          :diamond,   colorant"#d62728"),
+        ("conical_bounded", :square,    colorant"#2ca02c"),
+        ("conical",         :utriangle, colorant"#9467bd"),
+    ]
+
+    method = clustering_method == "kmedoids" ? "k-medoids" : "k-means"
+
+    p_normal = plot(
+        title          = "Total normal RP weight ($method, Local)",
+        titlefontsize  = 14,
+        xlabel         = "Number of representative periods (k)",
+        ylabel         = "Total normal RP weight (days)",
+        legend         = :topleft,
+        grid           = true,
+        left_margin    = 8Plots.mm,
+        bottom_margin  = 8Plots.mm,
+        xtickfontsize  = 13,
+        ytickfontsize  = 13,
+        tickfontfamily = "Times Bold",
+    )
+
+    p_wc = plot(
+        title          = "Total worst-case RP weight ($method, Local)",
+        titlefontsize  = 14,
+        xlabel         = "Number of representative periods (k)",
+        ylabel         = "Total worst-case RP weight (days)",
+        legend         = false,
+        grid           = true,
+        left_margin    = 8Plots.mm,
+        bottom_margin  = 8Plots.mm,
+        xtickfontsize  = 13,
+        ytickfontsize  = 13,
+        tickfontfamily = "Times Bold",
+    )
+
+    for (wtype, marker, color) in weight_types
+        method_label = "$(clustering_method)_$(wtype)_local_wc_2"
+        df = filter(r -> r.method == method_label, results_agg)
+        isempty(df) && continue
+        sort!(df, :k)
+        total_normal = df.avg_weight_normal .* (df.k ./ 2)
+        total_wc     = df.avg_weight_wc     .* (df.k ./ 2)
+        plot!(p_normal, df.k, total_normal;
+            label      = wtype,
+            marker     = marker,
+            color      = color,
+            linewidth  = 2,
+            markersize = 7)
+        plot!(p_wc, df.k, total_wc;
+            label      = wtype,
+            marker     = marker,
+            color      = color,
+            linewidth  = 2,
+            markersize = 7)
+    end
+
+    combined = plot(p_normal, p_wc;
+        layout      = (1, 2),
+        size        = (1400, 600),
+    )
+    display(combined)
+    savefig(combined, joinpath(output_dir, "totalWeight_local_$(clustering_method).pdf"))
+end
+
+
+
+function plot_totalWeight_globalFixed(results_agg, clustering_method, output_dir)
+    weight_types = [
+        ("dirac",           :circle,    colorant"#1f77b4"),
+        ("convex",          :diamond,   colorant"#d62728"),
+        ("conical_bounded", :square,    colorant"#2ca02c"),
+        ("conical",         :utriangle, colorant"#9467bd"),
+    ]
+
+    method = clustering_method == "kmedoids" ? "k-medoids" : "k-means"
+
+    p_normal = plot(
+        title          = "Total normal RP weight ($method, global-fixed)",
+        titlefontsize  = 14,
+        xlabel         = "Number of representative periods (k)",
+        ylabel         = "Total normal RP weight (days)",
+        legend         = :topleft,
+        grid           = true,
+        left_margin    = 8Plots.mm,
+        bottom_margin  = 8Plots.mm,
+        xtickfontsize  = 13,
+        ytickfontsize  = 13,
+        tickfontfamily = "Times Bold",
+    )
+
+    p_wc = plot(
+        title          = "Total worst-case RP weight ($method, global-fixed)",
+        titlefontsize  = 14,
+        xlabel         = "Number of representative periods (k)",
+        ylabel         = "Total worst-case RP weight (days)",
+        legend         = false,
+        grid           = true,
+        left_margin    = 8Plots.mm,
+        bottom_margin  = 8Plots.mm,
+        xtickfontsize  = 13,
+        ytickfontsize  = 13,
+        tickfontfamily = "Times Bold",
+    )
+
+    for (wtype, marker, color) in weight_types
+        method_label = "$(clustering_method)_$(wtype)_global_fixed_wc_p10.0_2"
+        df = filter(r -> r.method == method_label, results_agg)
+        isempty(df) && continue
+        sort!(df, :k)
+        total_normal = df.avg_weight_normal .* (df.k .-1)
+        total_wc     = df.avg_weight_wc    
+        plot!(p_normal, df.k, total_normal;
+            label      = wtype,
+            marker     = marker,
+            color      = color,
+            linewidth  = 2,
+            markersize = 7)
+        plot!(p_wc, df.k, total_wc;
+            label      = wtype,
+            marker     = marker,
+            color      = color,
+            linewidth  = 2,
+            markersize = 7)
+    end
+
+    combined = plot(p_normal, p_wc;
+        layout      = (1, 2),
+        size        = (1400, 600),
+    )
+    display(combined)
+    savefig(combined, joinpath(output_dir, "totalWeight_global_fixed_$(clustering_method).pdf"))
+end
+
+
+function plot_totalWeight_global(results_agg, clustering_method, output_dir)
+    weight_types = [
+        ("dirac",           :circle,    colorant"#1f77b4"),
+        ("convex",          :diamond,   colorant"#d62728"),
+        ("conical_bounded", :square,    colorant"#2ca02c"),
+        ("conical",         :utriangle, colorant"#9467bd"),
+    ]
+
+    method = clustering_method == "kmedoids" ? "k-medoids" : "k-means"
+
+    p_normal = plot(
+        title          = "Total normal RP weight ($method, Global)",
+        titlefontsize  = 14,
+        xlabel         = "Number of representative periods (k)",
+        ylabel         = "Total normal RP weight (days)",
+        legend         = :topleft,
+        grid           = true,
+        left_margin    = 8Plots.mm,
+        bottom_margin  = 8Plots.mm,
+        xtickfontsize  = 13,
+        ytickfontsize  = 13,
+        tickfontfamily = "Times Bold",
+    )
+
+    p_wc = plot(
+        title          = "Total worst-case RP weight ($method, Global)",
+        titlefontsize  = 14,
+        xlabel         = "Number of representative periods (k)",
+        ylabel         = "Total worst-case RP weight (days)",
+        legend         = false,
+        grid           = true,
+        left_margin    = 8Plots.mm,
+        bottom_margin  = 8Plots.mm,
+        xtickfontsize  = 13,
+        ytickfontsize  = 13,
+        tickfontfamily = "Times Bold",
+    )
+
+    for (wtype, marker, color) in weight_types
+        method_label = "$(clustering_method)_$(wtype)_global_wc_2"
+        df = filter(r -> r.method == method_label, results_agg)
+        isempty(df) && continue
+        sort!(df, :k)
+        total_normal = df.avg_weight_normal .* (df.k .- 1)
+        total_wc     = df.avg_weight_wc     
+        plot!(p_normal, df.k, total_normal;
+            label      = wtype,
+            marker     = marker,
+            color      = color,
+            linewidth  = 2,
+            markersize = 7)
+        plot!(p_wc, df.k, total_wc;
+            label      = wtype,
+            marker     = marker,
+            color      = color,
+            linewidth  = 2,
+            markersize = 7)
+    end
+
+    combined = plot(p_normal, p_wc;
+        layout      = (1, 2),
+        size        = (1400, 600),
+    )
+    display(combined)
+    savefig(combined, joinpath(output_dir, "totalWeight_global_$(clustering_method).pdf"))
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function plot_gallery_regret_globalLocal_byClusteringMethod(results, output_dir; cross_scenario=false)
+    weight_types = [
+        ("dirac",           :circle,    "dirac"),
+        ("convex",          :diamond,   "convex"),
+        ("conical_bounded", :square,    "conical_bounded"),
+        ("conical",         :utriangle, "conical"),
+    ]
+    wc_options = [
+        ("global_wc", "Global"),
+        ("local_wc",  "Local"),
+    ]
+    colors = [:blue, :red, :green, :purple]
+
+    panels = []  # 4 panels: kmedoids-Global, kmedoids-Local, kmeans-Global, kmeans-Local
+
+    for (clustering_method, method_display) in [ ("kmeans", "k-means"), ("kmedoids", "k-medoids")]
+        for (wc_label, wc_display) in wc_options
+            is_first = clustering_method == "kmeans" && wc_label == "global_wc"
+
+            p = plot(
+                title         = "$wc_display ($method_display)",
+                xlabel        = "",
+                ylabel        = is_first ? "Regret (%)" : "",
+                legend        = (clustering_method == "kmedoids" && wc_label == "local_wc") ? :topright : false,
+                legendmarkersize = 18,
+                titlefontsize = 16,
+                grid          = true,
+                left_margin   = is_first ? 17Plots.mm : 0Plots.mm,
+                bottom_margin = 13Plots.mm,
+                xtickfontsize = 18,
+                ytickfontsize = 18,
+                tickfontfamily = "Times Bold",
+            )
+
+            for ((wtype, marker, wlabel), color) in zip(weight_types, colors)
+                method_label = "$(clustering_method)_$(wtype)_$(wc_label)_2"
+                df = filter(r -> r.method == method_label, results)
+                isempty(df) && continue
+
+                plot!(p, df.k, df.regret;
+                    label     = wlabel,
+                    marker    = marker,
+                    color     = color,
+                    linestyle = :solid,
+                    ribbon    = hasproperty(df, :regret_std) ? df.regret_std : zeros(nrow(df)),
+                    fillalpha = 0.17)
+            end
+            push!(panels, p)
+        end
+    end
+
+    add = cross_scenario ? "_cross" : ""
+    gallery = plot(panels...;
+        layout             = (1, 4),
+        size               = (2500, 1000),
+        plot_title         = "Regret vs number of RPs (k)",
+        plot_titlefontsize = 28,
+        titlefontsize      = 24,
+        guidefontsize      = 25,
+        legendfontsize     = 20,
+        legendmarkersize         = 12, 
+        right_margin       = 0Plots.mm,
+        top_margin         = 4Plots.mm,
+        bottom_margin      = 15Plots.mm,
+    )
+
+    xlabel_text = "Number of representative periods (k)"
+    annotate!(gallery[3], -24.0, -0.92, text(xlabel_text, 24, :center, :top))
+
+    display(gallery)
+    savefig(gallery, joinpath(output_dir, "gallery_regret_globalLocal_byMethod$(add).png"))
+end
+
+
+function plot_gallery_LOL_globalLocal_byClusteringMethod(results, output_dir, lol_ref; cross_scenario=false)
+    weight_types = [
+        ("dirac",           :circle,    "dirac"),
+        ("convex",          :diamond,   "convex"),
+        ("conical_bounded", :square,    "conical_bounded"),
+        ("conical",         :utriangle, "conical"),
+    ]
+    wc_options = [
+        ("global_wc", "Global"),
+        ("local_wc",  "Local"),
+    ]
+    colors = [:blue, :red, :green, :purple]
+
+    panels = []
+
+    for (clustering_method, method_display) in [ ("kmeans", "k-means"), ("kmedoids", "k-medoids")]
+        for (wc_label, wc_display) in wc_options
+            is_first = clustering_method == "kmeans" && wc_label == "global_wc"
+
+            p = plot(
+                title         = "$wc_display ($method_display)",
+                xlabel        = "",
+                ylabel        = is_first ? "Loss of Load" : "",
+                legend        = (clustering_method == "kmedoids" && wc_label == "local_wc") ? :topright : false,
+                legendmarkersize = 18,
+                titlefontsize = 16,
+                grid          = true,
+                left_margin   = is_first ? 17Plots.mm : 0Plots.mm,
+                bottom_margin = 13Plots.mm,
+                xtickfontsize = 18,
+                ytickfontsize = 18,
+                tickfontfamily = "Times Bold",
+            )
+            hline!(p, [lol_ref], linestyle=:dash, color=:black, label="reference")
+
+            for ((wtype, marker, wlabel), color) in zip(weight_types, colors)
+                method_label = "$(clustering_method)_$(wtype)_$(wc_label)_2"
+                df = filter(r -> r.method == method_label, results)
+                isempty(df) && continue
+
+                plot!(p, df.k, df.lol_reduced;
+                    label     = wlabel,
+                    marker    = marker,
+                    color     = color,
+                    linestyle = :solid,
+                    ribbon    = hasproperty(df, :lol_reduced_std) ? df.lol_reduced_std : zeros(nrow(df)),
+                    fillalpha = 0.12)
+            end
+            push!(panels, p)
+        end
+    end
+
+    add = cross_scenario ? "_cross" : ""
+    gallery = plot(panels...;
+        layout             = (1, 4),
+        size               = (2500, 1000),
+        plot_title         = "Loss of Load vs number of RPs (k)",
+        plot_titlefontsize = 28,
+        titlefontsize      = 24,
+        guidefontsize      = 25,
+        legendfontsize     = 18,
+        
+        right_margin       = 0Plots.mm,
+        top_margin         = 4Plots.mm,
+        bottom_margin      = 15Plots.mm,
+    )
+
+    xlabel_text = "Number of representative periods (k)"
+    annotate!(gallery[3], -24.0, -2.35, text(xlabel_text, 24, :center, :top))
+    display(gallery)
+    savefig(gallery, joinpath(output_dir, "gallery_LOL_globalLocal_byMethod$(add).png"))
 end

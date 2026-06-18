@@ -821,9 +821,9 @@ version = "1.57.1+0"
 
 [[deps.ParametricOptInterface]]
 deps = ["MathOptInterface"]
-git-tree-sha1 = "1585a5689cadad6a311594eca3b6a26b4fd417f3"
+git-tree-sha1 = "e0d3ca14265b107e625ddcd5a57c6761ff2cb4c1"
 uuid = "0ce4ce61-57bf-432b-a095-efac525d185e"
-version = "0.15.2"
+version = "0.15.3"
 
 [[deps.Parsers]]
 deps = ["Dates", "PrecompileTools", "UUIDs"]
@@ -1178,15 +1178,15 @@ version = "0.11.3"
 [[deps.TulipaClustering]]
 deps = ["CSV", "Clustering", "DataFrames", "Distances", "DuckDB", "DuckDB_jll", "LinearAlgebra", "ProgressBars", "SparseArrays", "Statistics", "TOML", "TulipaIO"]
 git-tree-sha1 = "6861349f3c6ab7be2cec396501c6ac337a657ba8"
-repo-rev = "e65efadec8368f36033ebb85f0390633739d1d2f"
+repo-rev = "e8fc133da9cc768c113f48448b00e35134f9d051"
 repo-url = "https://github.com/GeorgeKall/TulipaClustering.jl"
 uuid = "314fac8b-c762-4aa3-9d12-851379729163"
 version = "0.5.2"
 
 [[deps.TulipaEnergyModel]]
 deps = ["CSV", "DuckDB", "HiGHS", "JSON", "JuMP", "MathOptInterface", "OrderedCollections", "ParametricOptInterface", "Statistics", "TOML", "TimerOutputs", "TulipaIO"]
-git-tree-sha1 = "59d08d921d8484bd4790704c518a874006e04b07"
-repo-rev = "v0.21.0"
+git-tree-sha1 = "8bdfdf8134df08f58b9585947a19fdf2aeed4949"
+repo-rev = "79a9af543789b0d7b1398aaf6392baba2359cfa8"
 repo-url = "https://github.com/TulipaEnergy/TulipaEnergyModel.jl"
 uuid = "5d7bd171-d18e-45a5-9111-f1f11ac5d04d"
 version = "0.21.0"
