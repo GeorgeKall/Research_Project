@@ -10,17 +10,17 @@ Energy System Optimization, George Kalliakmanis Danassis, TU Delft, 2026.
 
 ## Repository Structure
 - Code/                            Julia scripts and environment
-    - exp1.jl                        Main experiment script
-    - utils.jl                       Helper functions
-    - plotting.jl                    Plotting functions
-    - Project.toml                   Julia environment specification
-    - Manifest.toml                  Exact dependency versions
+    - exp1.jl:                        Main experiment script
+    - utils.jl:                       Helper functions
+    - plotting.jl:                    Plotting functions
+    - Project.toml:                   Julia environment specification
+    - Manifest.toml:                  Exact dependency versions
 - Input_Data_and_Results/
-    - tutorial-9/                    Input CSV files for the energy system
-    - results/                     Output CSVs and graphs produced by the experiments
-    - results_0.18/                     Output CSVs and graphs produced by the experiments with ENS=0.18
-    - results_1.8/                      Output CSVs and graphs produced by the experiments with ENS=1.8
-    - results_cross-scenario/                     Output CSVs and graphs produced by the experiments with cross-scenario clustering
+    - tutorial-9/:                    Input CSV files for the energy system
+    - results/:                    Output CSV produced by the experiments
+        - 0.18:                     Output CSV produced by the experiments with tutorial-9 original data
+        - cross-scenario:                     Output CSV  produced by the experiments with cross-scenario clustering
+        - results_checkpoint:                 Output CSV  produced by the experiments with cross-scenario clustering
 ## Requirements
 
 - Julia 1.12.6
@@ -32,21 +32,17 @@ Energy System Optimization, George Kalliakmanis Danassis, TU Delft, 2026.
 2. Install Julia
 3. Open a terminal in the `Code/` directory and start Julia:
 
-```bash
-cd Code
-julia --project=.
+``` 
+   julia --project=.
 ```
-
-4. In the Julia REPL, instantiate the environment:
-
+4. Instantiate the environment (downloads all dependencies):
 ```julia
-] instantiate
+   using Pkg
+   Pkg.instantiate()
 ```
-
 5. Run the main experiment:
-
 ```julia
-include("exp1.jl")
+   include("exp1.jl")
 ```
 
 Results will be written to `Input_Data_and_Results/tutorial-9/results/`.
@@ -57,6 +53,6 @@ All dependencies are pinned in `Manifest.toml` for reproducibility.
 
 | Package | Version | Source |
 |---|---|---|
-| TulipaEnergyModel | v0.21.0 | [TulipaEnergy/TulipaEnergyModel.jl](https://github.com/TulipaEnergy/TulipaEnergyModel.jl) |
+| TulipaEnergyModel | v0.21.0 @ 79a9af54 | [TulipaEnergy/TulipaEnergyModel.jl](https://github.com/TulipaEnergy/TulipaEnergyModel.jl) |
 | TulipaClustering | v0.5.2 @ e65efad | [GeorgeKall/TulipaClustering.jl](https://github.com/GeorgeKall/TulipaClustering.jl) (fork with modifications) |
 | TulipaIO | v0.5.0 | [TulipaEnergy/TulipaIO.jl](https://github.com/TulipaEnergy/TulipaIO.jl) |
