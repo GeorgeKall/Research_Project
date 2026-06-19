@@ -6,7 +6,7 @@ This repository contains code, data, and results created as part of the 2025/202
 ## Paper
 
 > Experimenting with Blended Weights and Extreme Representative Periods for
-Energy System Optimization, George Kalliakmanis Danassis, TU Delft, 2026.
+Energy System Optimization, Georgios Kalliakmanis Danassis, TU Delft, 2026.
 
 Paper can be found in the following [link](). 
 
