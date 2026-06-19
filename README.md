@@ -1,12 +1,14 @@
 # Research Project 
 
-Code, data, and results for the research project for CSE3000 course at TU Delft.
+This repository contains code, data, and results created as part of the 2025/2026 edition of the for the   [CSE3000 Research Project](https://github.com/TU-Delft-CSE/Research-Project) course at TU Delft.
+
 
 ## Paper
 
 > Experimenting with Blended Weights and Extreme Representative Periods for
-Energy System Optimization, George Kalliakmanis Danassis, TU Delft, 2026.
+Energy System Optimization, Georgios Kalliakmanis Danassis, TU Delft, 2026.
 
+Paper can be found in the following [link](). 
 
 ## Repository Structure
 - Code/                            Julia scripts and environment
