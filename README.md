@@ -17,12 +17,13 @@ Paper can be found in the following [link]().
     - plotting.jl:                    Plotting functions
     - Project.toml:                   Julia environment specification
     - Manifest.toml:                  Exact dependency versions
+    - test.jl:                        Smaller experiment grid to plot RP profiles 
 - Input_Data_and_Results/
     - tutorial-9/:                    Input CSV files for the energy system
     - results/:                    Output CSV produced by the experiments
         - 0.18:                     Output CSV produced by the experiments with tutorial-9 original data
         - cross-scenario:                     Output CSV  produced by the experiments with cross-scenario clustering
-        - results_checkpoint:                 Output CSV  produced by the experiments with cross-scenario clustering
+        - results_checkpoint:                 Main output CSV produced by the experiments with per-scenario clustering
 ## Requirements
 
 - Julia 1.12.6
