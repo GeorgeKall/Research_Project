@@ -1,6 +1,6 @@
 # Research Project 
 
-This repository contains code, data, and results created as part of the 2025/2026 edition of the for the   [CSE3000 Research Project](https://github.com/TU-Delft-CSE/Research-Project) course at TU Delft.
+This repository contains code, data, and results created as part of the 2025/2026 (Q4) edition of the  [CSE3000 Research Project](https://github.com/TU-Delft-CSE/Research-Project) course at TU Delft.
 
 
 ## Paper
@@ -8,7 +8,7 @@ This repository contains code, data, and results created as part of the 2025/202
 > Experimenting with Blended Weights and Extreme Representative Periods for
 Energy System Optimization, Georgios Kalliakmanis Danassis, TU Delft, 2026.
 
-Paper can be found in the following [link](). 
+Paper can be found in the following [link](https://resolver.tudelft.nl/uuid:b60f5e1c-5397-4572-9c85-c954f4a7ce4d). 
 
 ## Repository Structure
 - Code/                            Julia scripts and environment
@@ -21,9 +21,10 @@ Paper can be found in the following [link]().
 - Input_Data_and_Results/
     - tutorial-9/:                    Input CSV files for the energy system
     - results/:                    Output CSV produced by the experiments
+        - results_checkpoint:                 Main output CSV produced by the experiments with per-scenario clustering    
         - 0.18:                     Output CSV produced by the experiments with tutorial-9 original data
-        - cross-scenario:                     Output CSV  produced by the experiments with cross-scenario clustering
-        - results_checkpoint:                 Main output CSV produced by the experiments with per-scenario clustering
+        - cross-scenario:                     Output CSV produced by the experiments with cross-scenario clustering
+        
 ## Requirements
 
 - Julia 1.12.6
